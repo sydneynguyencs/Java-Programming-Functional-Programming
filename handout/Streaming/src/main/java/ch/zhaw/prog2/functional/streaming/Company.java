@@ -2,6 +2,7 @@ package ch.zhaw.prog2.functional.streaming;
 
 import ch.zhaw.prog2.functional.streaming.finance.CurrencyAmount;
 import ch.zhaw.prog2.functional.streaming.finance.Payment;
+import ch.zhaw.prog2.functional.streaming.finance.PaymentsPerYear;
 import ch.zhaw.prog2.functional.streaming.humanresource.Employee;
 import ch.zhaw.prog2.functional.streaming.humanresource.Person;
 
@@ -114,9 +115,11 @@ public class Company {
     /*
      * Aufgabe g3)
      */
+    //anstatt amount verdoppelt, anders gelöst wegen Rundungsfehler
     public static final Function<Employee, Payment> paymentForEmployeeDecember = employee -> {
         Payment payment = paymentForEmployeeJanuary.apply(employee);
-        payment.setCurrencyAmount(payment.getCurrencyAmount().createModifiedAmount(amount -> amount *2));
+        payment.setCurrencyAmount(payment.getCurrencyAmount().createModifiedAmount(amount ->
+            employee.getYearlySalary().getAmount() - amount * 11));
         return payment;
     };
 }

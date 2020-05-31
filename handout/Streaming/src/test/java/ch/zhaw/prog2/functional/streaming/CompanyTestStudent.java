@@ -1,6 +1,7 @@
 package ch.zhaw.prog2.functional.streaming;
 
 import ch.zhaw.prog2.functional.streaming.finance.Payment;
+import ch.zhaw.prog2.functional.streaming.finance.PaymentsPerYear;
 import ch.zhaw.prog2.functional.streaming.humanresource.Employee;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,10 +63,8 @@ public class CompanyTestStudent {
         Payment pDec = testCompany.getPayments(Employee::isWorkingForCompany, Company.paymentForEmployeeDecember).get(0);
         int salaryJan = pJan.getCurrencyAmount().getAmount();
         int salaryDec = pDec.getCurrencyAmount().getAmount();
-        assertEquals(salaryJan*2, salaryDec);
         int yearlySalary = testCompany.getEmployeesByPredicate(Employee::isWorkingForCompany).get(0).getYearlySalary().getAmount();
-        //assertEquals(yearlySalary, salaryJan*11+salaryDec);
-
+        assertEquals(yearlySalary, salaryJan*11+salaryDec);
     }
 
 
