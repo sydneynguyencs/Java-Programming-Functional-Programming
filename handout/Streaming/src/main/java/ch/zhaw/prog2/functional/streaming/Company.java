@@ -94,19 +94,29 @@ public class Company {
      * Aufgabe g1)
      */
     public List<Payment> getPayments(Predicate<Employee> employeePredicate, Function<Employee, Payment> paymentForEmployee) {
-        return null;
+       return  employeeList.stream()
+            .filter(employeePredicate)
+            .map(paymentForEmployee)
+            .collect(Collectors.toList());
     }
 
     /*
      * Aufgabe g2)
      */
     public static final Function<Employee, Payment> paymentForEmployeeJanuary = employee -> {
-        return null;
+        Payment payment = new Payment();
+        CurrencyAmount salary = employee.getYearlySalary();
+        int paymentsPerYear = employee.getPaymentsPerYear().getValue();
+        salary = salary.createModifiedAmount(amount -> amount / paymentsPerYear);
+        payment.setCurrencyAmount(salary).setBeneficiary(employee).setTargetAccount(employee.getAccount());
+        return payment;
     };
     /*
      * Aufgabe g3)
      */
     public static final Function<Employee, Payment> paymentForEmployeeDecember = employee -> {
-        return null;
+        Payment payment = paymentForEmployeeJanuary.apply(employee);
+        payment.setCurrencyAmount(payment.getCurrencyAmount().createModifiedAmount(amount -> amount *2));
+        return payment;
     };
 }

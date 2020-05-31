@@ -1,5 +1,6 @@
 package ch.zhaw.prog2.functional.streaming;
 
+import ch.zhaw.prog2.functional.streaming.finance.Payment;
 import ch.zhaw.prog2.functional.streaming.humanresource.Employee;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,7 +31,13 @@ public class CompanyTestStudent {
      */
     @Test
     void getEmployeesByPredicate() {
-        /*List<Employee> list = new ArrayList<>();
+        List<Employee> femaleList = testCompany.getEmployeesByPredicate(Employee::isFemale);
+        List<Employee> maleList = testCompany.getEmployeesByPredicate(Employee -> !Employee.isFemale());
+
+        assertEquals(testCompany.getAllEmployees().size(), femaleList.size()+maleList.size());
+
+        //dieser Codeteil dient nur zum Ausprobieren für mich
+        List<Employee> list = new ArrayList<>();
         Employee jojomina = new Employee("Jojomina", "Female");
         Employee binturong = new Employee("Binturong", "Female");
         jojomina.setFemale(true);
@@ -40,13 +48,25 @@ public class CompanyTestStudent {
         list.add(new Employee("Binturong", "Male"));
 
         Company c = new Company(list);
-        List<Employee> femaleList = c.getEmployeesByPredicate(Employee::isFemale);
-        List<Employee> maleList = c.getEmployeesByPredicate(Employee -> !Employee.isFemale());
-        */
-        List<Employee> femaleList = testCompany.getEmployeesByPredicate(Employee::isFemale);
-        List<Employee> maleList = testCompany.getEmployeesByPredicate(Employee -> !Employee.isFemale());
+        List<Employee> femList = c.getEmployeesByPredicate(Employee::isFemale);
+        assertEquals(2, femList.size());
 
-        assertEquals(testCompany.getAllEmployees().size(), femaleList.size()+maleList.size());
     }
+
+    /*
+     * Optionaler test für g)
+     */
+    @Test
+    void getPayments() {
+        Payment pJan = testCompany.getPayments(Employee::isWorkingForCompany, Company.paymentForEmployeeJanuary).get(0);
+        Payment pDec = testCompany.getPayments(Employee::isWorkingForCompany, Company.paymentForEmployeeDecember).get(0);
+        int salaryJan = pJan.getCurrencyAmount().getAmount();
+        int salaryDec = pDec.getCurrencyAmount().getAmount();
+        assertEquals(salaryJan*2, salaryDec);
+        int yearlySalary = testCompany.getEmployeesByPredicate(Employee::isWorkingForCompany).get(0).getYearlySalary().getAmount();
+        //assertEquals(yearlySalary, salaryJan*11+salaryDec);
+
+    }
+
 
 }
