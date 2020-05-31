@@ -41,17 +41,5 @@ class PayrollCreatorTest {
         assertTrue(paysum > 100000);
     }
 
-    @Test
-    void payrollAmountByCurrency(){
-        Company testCompany = new CompanySupplier(new Random(RANDOM_SEED), EMPLOYEE_COUNT).get();
-        PayrollCreator payrollCreator = new PayrollCreator(testCompany);
-        int sumToBeChecked = PayrollCreator.payrollAmountByCurrency(payrollCreator.getPayrollForAll()).stream()
-            .mapToInt(CurrencyAmount::getAmount)
-            .sum();
-        int sumReal = payrollCreator.getPayrollForAll().getPaymentList().stream()
-            .mapToInt(Payment -> Payment.getCurrencyAmount().getAmount())
-            .sum();
-        assertEquals(sumReal, sumToBeChecked);
-    }
 }
 
